@@ -1,0 +1,31 @@
+.row {
+    display: flex;
+    width: 180px;
+    background-color: pink;
+
+    &:nth-child(odd) {
+        background: rgb(29, 29, 217);
+        color: white;
+    }
+
+    .col {
+        width: 60px;
+        height: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+
+        &.active {
+            background-color: red;
+            color: white;
+        }
+
+        &.active:nth-child(odd) {
+            background: rgb(4, 249, 245);
+            color: black;
+        }
+    }
+
+}
