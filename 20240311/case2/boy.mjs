@@ -1,7 +1,8 @@
+// 直接命名導出
 export const sayMyName=()=>{
     console.log("Benny");
 }
 
-export const suck=()=>{
-    console.log("YummY");
+export const sayMyCountry=()=>{
+    console.log("Taiwan");
 }
