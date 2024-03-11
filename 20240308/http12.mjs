@@ -18,9 +18,9 @@ const mines = {
 
 };
 
-// 物件取得方法
-// mines.html; 取值
-// mines["html"]  取索引
+// 物件取值方法
+// mines.html;
+// mines["html"]  
 
 const server = http.createServer((request, response) => {
     let content;

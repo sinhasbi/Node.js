@@ -11,7 +11,7 @@ const server = http.createServer((request, response) => {
     // console.log(request.url);
     // console.log(pathname);
 
-    // 分流 http06
+    // 分流 
     if (pathname === "/") {
         // 只有主要的要特別編譯，css js檔不用做
         response.setHeader('content-type', 'text/html;charset=utf-8');
