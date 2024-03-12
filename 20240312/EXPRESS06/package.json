@@ -1,0 +1,16 @@
+{
+  "name": "TEST SITE",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js",
+    "start":"node index.js"
+  },
+  "keywords": [],
+  "author": "WEN HAO YUN",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
