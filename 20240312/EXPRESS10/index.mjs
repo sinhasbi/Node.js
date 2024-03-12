@@ -7,6 +7,7 @@ const app = express();
 app.use(express.static(resolve(__dirname, 'public')))
 
 // 利用npm下載下來
+// 後利用這些資料夾下用的東西
 app.use("/bootstrap", express.static(resolve(__dirname, 'node_modules/bootstrap/dist')))
 app.use('/fontawesome', express.static(resolve(__dirname, 'node_modules/@fortawesome/fontawesome-free')));
 app.use('/jquery', express.static(resolve(__dirname, 'node_modules/jquery/dist')));

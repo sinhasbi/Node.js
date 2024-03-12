@@ -1,7 +1,7 @@
 {
   "name": "express03",
   "version": "1.0.0",
-  "description": "",
+  "description": "1. 資料來源是singers.json\r 2. 下載後安裝 \r ```bash\r npm i\r ```\r 3. 測試檔案請安裝全域的 nodemon ，並且執行\r ```bash\r npm run test\r ```\r 4. 執行的話，請輸入\r ```bash\r npm start\r ```",
   "main": "index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
