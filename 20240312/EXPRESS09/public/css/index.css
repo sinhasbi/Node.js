@@ -1,0 +1,7 @@
+body{
+    min-height: 100svh;
+    background-image: url(../images/BlueberryJamScreenshots_20201029_04.jpg);
+    background-size: cover;
+    background-position: center center;
+    color: #fff;
+}
