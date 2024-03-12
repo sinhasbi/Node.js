@@ -46,7 +46,7 @@ app.get("/books/:cateID/:bookID", (req, res) => {
 
 // 路由規則
 app.get("/user/:id([a-z][0-9]+)", (req, res) => {
-    res.send(`${req.params.userID}`);
+    res.send(`${req.params.id}`);
 });
 
 app.get("/files/*", (req, res) => {
