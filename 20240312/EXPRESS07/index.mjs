@@ -61,9 +61,9 @@ app.get("/setting", (req, res) => {
 
 const errorToLog = (req, res, next) => {
     const { ip, path } = req
-    const accessDate = moment().format("YYYY-MM-DDTHH:mm:ss")
-    const accesslog = `${accessDate} ${ip} ${path}\r\n`
-    fs.appendFile(resolve(__dirname, "error.log"), accesslog, (err) => {
+    const errorDate = moment().format("YYYY-MM-DDTHH:mm:ss")
+    const errorlog = `${errorDate} ${ip} ${path}\r\n`
+    fs.appendFile(resolve(__dirname, "error.log"), errorlog, (err) => {
         if (err) {
             console.log("寫入失敗");
         }
