@@ -1,5 +1,6 @@
 import express from "express";
 import usersRouter from "./usersRouters.mjs"
+import productsRouter from "./productsRouters.mjs"
 const app = express();
 
 
@@ -9,13 +10,13 @@ app.get("/", (req, res) => {
 
 app.use("/users", usersRouter);
 
-app.use("/products", usersRouter);
+app.use("/products", productsRouter);
 
 app.get("/post", (req, res) => {
     res.send("使用者登入流程")
 })
 
-app.get("search", (req, res) => {
+app.get("/search", (req, res) => {
     res.send("全站搜尋")
 })
 

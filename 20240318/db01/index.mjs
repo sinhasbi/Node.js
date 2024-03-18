@@ -9,7 +9,7 @@ connection.execute(
             console.log(error);
             return false
         }
-        // console.logr(results);
+        console.log(results);
         data = results;
         // console.log(fields);
         

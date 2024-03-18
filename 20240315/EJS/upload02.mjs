@@ -60,12 +60,12 @@ app.get("/form2_2", (req, res) => {
 })
 
 app.post("/upload1", upload.single("myFile"), (req, res) => {
-    // res.send("處理檔案上傳")
-    let timestamp = Date.now()
-    // new Date().getTime() JS的時間戳記寫法
-    let newName = `${timestamp}${extname(req.file.originalname)}`
-    renameSync(req.file.path, resolve(__dirname, "public", "upload", newName))
-    req.body.myFile = newName
+    // // res.send("處理檔案上傳")
+    // let timestamp = Date.now()
+    // // new Date().getTime() JS的時間戳記寫法
+    // let newName = `${timestamp}${extname(req.file.originalname)}`
+    // renameSync(req.file.path, resolve(__dirname, "public", "upload", newName))
+    // req.body.myFile = newName
     res.json({ body: req.body, file: req.file })
 })
 
@@ -86,16 +86,16 @@ app.post("/upload2", upload.array("myFile", 3), (req, res) => {
 
 
 app.post("/upload2_2", upload.array("myFile[]", 3), (req, res) => {
-    let myFiles = [];
+    // let myFiles = [];
 
-    req.files.forEach(file => {
-        let newName = `${file.filename}${extname(file.originalname)}`
-        myFiles.push(newName)
-        rename(file.path, resolve(__dirname, "public", "uploads", newName))
-    })
-    req.body.myFiles = myFiles
+    // req.files.forEach(file => {
+    //     let newName = `${file.filename}${extname(file.originalname)}`
+    //     myFiles.push(newName)
+    //     rename(file.path, resolve(__dirname, "public", "uploads", newName))
+    // })
+    // req.body.myFiles = myFiles
 
-    res.json({ body: req.body })
+    res.json({ body: req.body ,files:req.files})
 })
 
 app.listen(3000, () => {

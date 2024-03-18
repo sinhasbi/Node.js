@@ -6,7 +6,7 @@ import { rename } from "fs/promises"
 const __dirname = import.meta.dirname
 
 const app = express()
-
+// 全局的配置
 app.set("view engine", "ejs")
 app.set("views", resolve(__dirname, "views"))
 
@@ -30,7 +30,7 @@ app.get("/form2", (req, res) => {
 })
 
 app.get("/form2_2", (req, res) => {
-    res.render("form2")
+    res.render("form2_2")
 })
 
 app.post("/upload1", upload.single("myFile"), (req, res) => {
@@ -41,7 +41,7 @@ app.post("/upload1", upload.single("myFile"), (req, res) => {
     renameSync(req.file.path, resolve(__dirname, "public", "upload", newName))
     req.body.myFile = newName
     // res.json({ body: req.body, file: req.file })
-    res.json({ body: req.body })
+    res.json({ body: req.body ,file: req.file})
 })
 
 // 多檔案上傳
@@ -56,7 +56,7 @@ app.post("/upload2", upload.array("myFile", 3), (req, res) => {
         
     })
     req.body.myFiles = myFiles
-    res.json({ body: req.body })
+    res.json({ body: req.body,file: req.files})
 })
 
 
@@ -65,12 +65,11 @@ app.post("/upload2_2", upload.array("myFile[]", 3), (req, res) => {
     // res.json({ body: req.body, file: req.files })
     req.files.forEach(file => {
         let newName = `${file.filename}${extname(file.originalname)}`
-        // console.log(newName);
-        myFiles.push(newName)
-        rename(file.name, resolve(__dirname, "public", "upload", newName));
+        myFiles.push(newName);
+        rename(file.path, resolve(__dirname, "public", "upload", newName));
         
     })
-    req.body.myFile = newName
+    req.body.myFiles = myFiles
     res.json({ body: req.body })
 })
 
