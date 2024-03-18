@@ -79,5 +79,15 @@ btnUpdate.addEventListener("click", e => {
         console.log(key, value);
     }
 
-    fetch().then().then().catch()
+    fetch(url, {
+        method: "PUT",
+        body: formData
+
+    }).then(response => {
+        return response.json()
+    }).then(result => {
+        console.log(result);
+    }).catch(error => {
+        console.log(error);
+    })
 })
