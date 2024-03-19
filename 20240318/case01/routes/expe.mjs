@@ -35,6 +35,7 @@ router.post('/', async (req, res, next) => {
   // let sort = 1;
   // let money = 30;
   // let date = "2024-03-18";
+  
   const { title, sort, money, date } = req.body
 
   let sql = "INSERT INTO `expense` (`id`, `title`, `sort`, `money`, `date`) VALUES (NULL, ?, ?, ?, ?);"
@@ -55,15 +56,41 @@ router.put('/', upload.none(), async (req, res, next) => {
   const { title, money, sort, date, id } = req.body
   let sql = "UPDATE `expense` SET `title` = ?, `sort` = ?, `money` = ?, `date` = ? WHERE `expense`.`id` = ?;"
   let dataAry = [title, sort, money, date, id];
-  let results = await connection.execute(sql, dataAry);
-  console.log(results);
+  // 20240319繼續開始
+  // 修改回傳值，因為現在是回傳布林值，所以把results拿掉解構賦值
+  let result = await connection.execute(sql, dataAry).then((results) => {
+    console.log(results[0]);
+    // 如果修改過的話，吐出布林值
+    // results一定會式陣列，索引值0是結果，索引值1是欄位
+    // UPDATE 不會有欄位，所以值是undifined
+    if (results[0].changedRows > 0) {
+      return true
+    } else {
+      return false
+    }
+  }).catch(error => false);
+  console.log(result);
   // 20240318結束點，要改成JSON
-  res.send('修改指定日期的一筆消費');
+  // res.send('修改指定日期的一筆消費');
   // res.redirect(`/expe/d/${date}`)
+
+  res.json({ result })
 });
 
-router.delete('/', (req, res, next) => {
-  res.send('刪除指定日期的一筆消費');
+router.delete('/', upload.none(), async (req, res, next) => {
+  // res.send('刪除指定日期的一筆消費');
+  const { id } = req.body;
+  let sql = "DELETE FROM expense WHERE `expense`.`id` = ?"
+  const dataAry = [id];
+  const result = await connection.execute(sql, dataAry).then(results => {
+    if (results[0].affectedRows > 0) {
+      return true
+    } else {
+      return false
+    }
+  }).catch(error => false)
+  console.log(result);
+  res.json({ result })
 });
 
 

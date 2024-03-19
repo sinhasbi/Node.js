@@ -39,14 +39,15 @@
       <div class="btn btn-primary btn-sm fs-6 money text-end pe-2">金額</div>
     </div>
     <!-- 顯示出消費紀錄 -->
+    <!-- 20240319增加一個lists包住 -->
+    <div class="lists">
     <% 
     let totalMoney=0
     data.forEach((item,index)=>{
       totalMoney+=item.money
-      let sortName
-      if (sorts){
+      
       let sortName = sorts.find(sort => sort.id === item.sort).name
-      }
+      
     %>
      <div class="unit fs-6 list" id="<%=item.id%>" title="<%=item.title%>" sort="<%=item.sort%>" money="<%=item.money%>">
       <div class="sn ps-2"><%=index+1%></div>
@@ -57,6 +58,7 @@
     <% 
        })
     %>
+    </div>
     <% if(!data || data.length <=0){%>
 
     <h1 class="pt-3">本日無消費紀錄</h1>
