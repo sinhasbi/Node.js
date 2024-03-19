@@ -4,8 +4,7 @@ let data;
 
 (async () => {
     // data = await getData('SELECT * FROM `sort` WHERE `id` = ?',[id])
-    data = await getData('SELECT * FROM `sort` WHERE `id` = ?',
-        [id]).then(results => {
+    data = await getData('SELECT * FROM `sort` WHERE `id` = ?',[id]).then(results => {
             // console.log(`results`);
             // console.log(results);
             return results[0]
@@ -34,7 +33,6 @@ function getData(SQL, ary) {
                     return false
                 }
                 resolve(results)
-
             }
         );
     })

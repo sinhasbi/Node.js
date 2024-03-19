@@ -13,21 +13,23 @@ router.get('/', (req, res, next) => {
 });
 
 // 把資料庫東西傳進來
+// sort的東西
 router.get('/d/:date', async (req, res, next) => {
   // res.send("讀取指定日期的所有消費");
   const date = req.params.date;
   let sql = 'SELECT * FROM `sort`'
-  // 不會顯示系統錯誤碼.catch(error => [undefined])
+  
   let [sorts] = await connection.execute(sql).catch(error => [undefined])
 
   // 顯示指定日期的消費
   sql = 'SELECT * FROM `expense` WHERE `date`= ?'
-  let dataAry = [date]
-  let [data] = await connection.execute(sql, dataAry).catch(error => [[]]);
-  // console.log(data);
+  let dateAry = [date]
+  let [data] = await connection.execute(sql, dateAry).catch(error => [[]]);
+  console.log(data);
   res.render("index", { date, sorts, data })
 });
 
+// 新增
 // 表單送出
 router.post('/', async (req, res, next) => {
   // res.send('新增指定日期的一筆消費');
@@ -77,6 +79,7 @@ router.put('/', upload.none(), async (req, res, next) => {
   res.json({ result })
 });
 
+// 刪除
 router.delete('/', upload.none(), async (req, res, next) => {
   // res.send('刪除指定日期的一筆消費');
   const { id } = req.body;

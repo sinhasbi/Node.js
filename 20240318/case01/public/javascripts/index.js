@@ -48,7 +48,7 @@ btnAddShow.addEventListener("click", e => {
     updateSet.classList.remove("d-flex")
     bsOffcanvas.show()
 })
-
+// 新增
 btnSend.addEventListener("click", e => {
     form1.submit();
 })
@@ -75,6 +75,8 @@ btnSend.addEventListener("click", e => {
 //     })
 // })
 
+
+// 顯示
 lists.addEventListener("click", e => {
     // console.log(e.target.closest(".list"));
 
@@ -98,6 +100,7 @@ lists.addEventListener("click", e => {
 
 })
 
+// 修改
 btnUpdate.addEventListener("click", e => {
     let url = "/expe";
     const formData = new FormData(form1)
@@ -129,6 +132,7 @@ btnUpdate.addEventListener("click", e => {
     })
 })
 
+// 刪除
 btnDel.addEventListener("click", e => {
     let url = "/expe";
     const formData = new FormData(form1)
