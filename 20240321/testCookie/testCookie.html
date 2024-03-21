@@ -9,7 +9,7 @@
 
 <body>
     <script>
-        // ES6 47格
+        // ES6 
         const getCookie = (name) => {
             const nameEQ = `${name}=`;
             const ca = document.cookie.split(';').map(cookie => cookie.trim());
@@ -24,9 +24,10 @@
         let expires = `expires=${today.toUTCString()}`
         document.cookie = expires
 
+        // 使password過期
         let dd = new Date
         dd.setDate(today.getDate() - 30)
-        document.cookie = `password=;expires:${dd.toUTCString()}`
+        document.cookie = `password=a12345;expires:${dd.toUTCString()}`
         document.cookie = `head=https://randomuser.me/api/portraits/women/91.jpg;${expires}`
         // console.log(document.cookie);
 

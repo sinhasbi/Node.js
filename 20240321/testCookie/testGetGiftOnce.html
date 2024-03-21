@@ -92,7 +92,7 @@
             document.cookie=`${key}=;${expires}`
         };
 
-        delCookie();
+        delCookie("gifted");
 
         if (!getCookie("gifted")) {
             box.classList.remove("hidden")
@@ -106,7 +106,7 @@
             const randomNum = Math.floor(Math.random() * 20) + 1;
             // console.log(randomNum);
             setCookie("gifted",randomNum);
-            info.innerHTML = `恭喜中獎，得到第 <span class="big">${randomNum}</span> 獎 ~`
+            info.innerHTML = `恭喜中獎，得到第 <span class="big">${getCookie("gifted")}</span> 獎 ~`
             box.classList.add("hidden")
             unbox.classList.remove("hidden")
         })
