@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STORAGE</title>
+</head>
+
+<body>
+    <script>
+        const storage = localStorage;
+        // const storage=sessionStorage;
+        storage.setItem("username", "Ben Chen")
+        storage.setItem("password", "a12345")
+        storage.setItem("account", "ben")
+
+        // storage.removeItem("password")
+
+        // storage.clear()
+        console.log(storage.getItem("username"));
+        console.log(storage.getItem("password"));
+        console.log(storage.getItem("account"));
+        // 系統好像重新設定好排序了
+        console.log(storage.key(1));
+        console.log(storage.key(2));
+        console.log(storage.key(0));
+
+        // 有length就可以跑迴圈
+        console.log(storage.length);
+        // 方法一
+        for (let i = 0; i < storage.length; i++) {
+            console.log(`${storage.key(i)}=${storage.getItem(storage.key(i))}`);
+        }
+        // 方法二
+        for (let [key, value] of Object.entries(storage)) {
+            console.log(`${key}=${value}`);
+        }
+
+    </script>
+</body>
+
+</html>

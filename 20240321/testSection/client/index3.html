@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div class="container pt-3">
+        <form action="http://localhost:3000" method="post">
+            <div class="input-group mb-2">
+                <span class="input-group-text">帳號</span>
+                <input type="text" class="form-control" name="account">
+            </div>
+            <div class="input-group mb-2">
+                <span class="input-group-text">密碼</span>
+                <input type="password" class="form-control" name="password">
+            </div>
+            <div class="d-flex justify-content-end">
+                <div class="btn btn-primary btn-send">送出</div>
+                <!-- <button>送出</button> -->
+            </div>
+        </form>
+        <div class="login d-none">
+            <h1>將會放上使用者名稱</h1>
+            <div class="btn btn-primary btn-logout">Logout</div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
+    <script>
+        const btnSend = document.querySelector(".btn-send");
+        const btnLogout = document.querySelector(".btn-logout")
+        const form1 = document.querySelector("form");
+        const login = document.querySelector(".login");
+        const h1 = document.querySelector(".login h1");
+
+        const getCookie = (name) => {
+            const nameEQ = `${name}=`;
+            const ca = document.cookie.split(';').map(cookie => cookie.trim());
+            const cookie = ca.find(cookie => cookie.startsWith(nameEQ));
+            return cookie ? cookie.substring(nameEQ.length) : null;
+        };
+
+        const setCookie = (key, value, day = 1) => {
+            let today = new Date();
+            today.setDate(today.getDate() + day)
+            let expires = `expires=${today.toUTCString()}`;
+            let path = "path=/"
+            document.cookie = `${key}=${value};${expires};${path}`;
+        }
+
+        const delCookie = (key) => {
+            let today = new Date();
+            today.setDate(today.getDate() - 30)
+            let expires = `expires=${today.toUTCString()}`;
+            document.cookie = `${key}=;${expires}`;
+        }
+
+        setCookie("test_session_id", 32518345793847)
+        // delCookie("test_session_id")
+        checkLogin();
+
+        // fetch送出表單內容的第三個方法
+        btnSend.addEventListener("click", e => {
+            let url = "http://localhost:3000";
+            let params = {
+                account: document.querySelector("[name=account]").value,
+                password: document.querySelector("[name=password]").value
+            }
+            fetch(url, {
+                credentials: "include",
+                method: "POST",
+                body: JSON.stringify(params),
+                headers: {
+                    "content-type": "application/json"
+                }
+            }).then(response => response.json()).then(result => {
+                console.log(result);
+                if (result.error) {
+                    alert(result.error);
+                } else {
+                    form1.classList.add("d-none");
+                    h1.innerHTML = result.user.name;
+                    login.classList.remove("d-none");
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        })
+
+        btnLogout.addEventListener("click", e => {
+            let url = "http://localhost:3000/logout";
+            fetch(url, {
+                credentials: "include",
+                method: "GET"
+                // 不傳送資料，不用body: formData
+            }).then(response => response.json()).then(result => {
+                // console.log(result);
+                if (result.user) {
+                    form1.classList.add("d-none");
+                    h1.innerHTML = result.user.name;
+                    login.classList.remove("d-none");
+
+                } else {
+                    form1.classList.remove("d-none");
+                    login.classList.add("d-none");
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        })
+
+        function checkLogin() {
+            let url = "http://localhost:3000/checkLogin";
+            fetch(url, {
+                credentials: "include",
+                method: "GET"
+                // 不傳送資料，不用body: formData
+            }).then(response => response.json()).then(result => {
+                // console.log(result);
+                if (result.user) {
+                    form1.classList.add("d-none");
+                    h1.innerHTML = result.user.name;
+                    login.classList.remove("d-none");
+
+                } else {
+
+                    form1.classList.remove("d-none");
+                    login.classList.add("d-none");
+                }
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+    </script>
+</body>
+
+</html>

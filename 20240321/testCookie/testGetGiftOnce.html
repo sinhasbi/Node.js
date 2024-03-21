@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET GIFT</title>
+    <style>
+        body {
+            min-height: 100svh;
+            display: grid;
+            place-items: center;
+        }
+
+        .box {
+            width: 300px;
+            height: 300px;
+            cursor: pointer;
+
+            & img {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .unbox {
+            width: auto;
+            height: 350px;
+            cursor: pointer;
+
+            & img {
+                width: auto;
+                height: 100%;
+            }
+        }
+
+        .info {
+            font-size: 36px;
+            text-align: center;
+        }
+
+        .big {
+            font-family: sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: red;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="package">
+            <div class="info"></div>
+            <div class="box hidden">
+                <img src="https://littleblessings.com.au/wp-content/uploads/2019/09/Gift-Box.jpg" alt="">
+            </div>
+        </div>
+        <div class="unbox hidden">
+            <img src="https://st4.depositphotos.com/2495409/24488/i/450/depositphotos_244880124-stock-photo-opened-gift-box-illustration-isolated.jpg"
+                alt="">
+        </div>
+
+    </div>
+    <script>
+        const box = document.querySelector(".box")
+        const unbox = document.querySelector(".unbox")
+        const info = document.querySelector(".info")
+
+        const getCookie = (name) => {
+            const nameEQ = `${name}=`;
+            const ca = document.cookie.split(';').map(cookie => cookie.trim());
+            const cookie = ca.find(cookie => cookie.startsWith(nameEQ));
+            return cookie ? cookie.substring(nameEQ.length) : null;
+        };
+
+        const setCookie = (key, value, day = 1) => {
+            let today = new Date();
+            today.setDate(today.getDate() + day)
+            let expires = `expires=${today.toUTCString()}`
+            document.cookie=`${key}=${value};${expires}`
+        };
+
+        const delCookie = (key) => {
+            let today = new Date();
+            today.setDate(today.getDate() -30)
+            let expires = `expires=${today.toUTCString()}`
+            document.cookie=`${key}=;${expires}`
+        };
+
+        delCookie();
+
+        if (!getCookie("gifted")) {
+            box.classList.remove("hidden")
+            info.innerHTML = "請點擊盒子進行抽獎"
+        } else {
+            unbox.classList.remove("hidden")
+            info.innerHTML = `已抽獎，得到第<span class="big">${getCookie("gifted")}</span>獎`
+        }
+
+        box.addEventListener("click", e => {
+            const randomNum = Math.floor(Math.random() * 20) + 1;
+            // console.log(randomNum);
+            setCookie("gifted",randomNum);
+            info.innerHTML = `恭喜中獎，得到第 <span class="big">${randomNum}</span> 獎 ~`
+            box.classList.add("hidden")
+            unbox.classList.remove("hidden")
+        })
+    </script>
+</body>
+
+</html>

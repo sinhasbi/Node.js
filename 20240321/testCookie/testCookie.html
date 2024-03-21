@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COOKIE TEST</title>
+</head>
+
+<body>
+    <script>
+        // ES6 47格
+        const getCookie = (name) => {
+            const nameEQ = `${name}=`;
+            const ca = document.cookie.split(';').map(cookie => cookie.trim());
+            const cookie = ca.find(cookie => cookie.startsWith(nameEQ));
+            return cookie ? cookie.substring(nameEQ.length) : null;
+        };
+        // 設定cookie
+        document.cookie = "username=Ben Chen";
+        let today = new Date();
+        today.setDate(today.getDate() + 30)
+        console.log(today.toUTCString());
+        let expires = `expires=${today.toUTCString()}`
+        document.cookie = expires
+
+        let dd = new Date
+        dd.setDate(today.getDate() - 30)
+        document.cookie = `password=;expires:${dd.toUTCString()}`
+        document.cookie = `head=https://randomuser.me/api/portraits/women/91.jpg;${expires}`
+        // console.log(document.cookie);
+
+
+        console.log(getCookie("username"));
+        console.log(getCookie("password"));
+        console.log(getCookie("head"));
+    </script>
+</body>
+
+</html>

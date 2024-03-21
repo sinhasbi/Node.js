@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TO DO LIST</title>
+    <style>
+        #myInput {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 24px;
+            padding-left: 10px;
+        }
+
+        /* 框框可以手動刻，找一下怎麼做到 */
+        .todo {
+            font-size: 30px;
+            user-select: none;
+
+        }
+
+        .delete {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="myInput" autofocus>
+    <div class="todolist">
+        <!-- <div class="todo">
+            <input type="checkbox" id="todo1">
+            <label for="todo1">買雞蛋</label>
+        </div> -->
+    </div>
+    <script>
+        let todoAry;
+        const todolist = document.querySelector(".todolist")
+        const myInput = document.querySelector("#myInput")
+
+
+        const setTodo = tempObj => {
+            // 產生實體DOM
+            let node = document.createElement("div")
+            node.innerHTML = `<div class="todo">
+                    <input type="checkbox" id="todo${tempObj.t}">
+                    <label for="${tempObj.t}">${tempObj.text}</label>
+                    </div>`;
+            todolist.append(node.children[0])
+
+        }
+
+        if (localStorage.getItem("todo")) {
+            todoAry = JSON.parse(localStorage.getItem("todo"))
+            todoAry.forEach(dodo => {
+                setTodo(dodo)
+            });
+        } else {
+            todoAry = []
+        }
+
+        console.log(todoAry);
+
+
+        // 增加
+        myInput.addEventListener("keyup", e => {
+            // console.log(e.key);
+            if (e.ctrlKey === true && e.key === "Enter") {
+                let t = new Date().getTime();
+                let tempObj = {};
+                tempObj.t = t;
+                tempObj.text = e.currentTarget.value;
+                console.log(tempObj);
+                todoAry.push(tempObj);
+
+                localStorage.setItem("todo", JSON.stringify(todoAry));
+
+                setTodo(tempObj)
+                myInput.value = "";
+            };
+        })
+
+        // 刪除
+        todolist.addEventListener("change", e => {
+            // 記憶體刪除
+            // console.log(e.target);
+            e.target.disabled = true;
+            let t = parseInt(e.target.id.slice(4))
+            // console.log(t);
+            todoAry = todoAry.filter(dodo => dodo.t !== t);
+            localStorage.setItem("todo", JSON.stringify(todoAry))
+
+            // 實體刪除
+            let element = e.target.closest(".todo");
+
+            // element.remove();
+            const animation = element.animate([
+                {
+                    transform: `translateY(0)`,
+                    opacity: 1
+                },
+                {
+                    transform: `translateY(${window.innerHeight - 50 - element.getBoundingClientRect().top}px)`,
+                    opacity: 0
+                }
+            ], {
+                duration: 500,
+                fill: "forwards",
+                easing: "ease-in-out"
+            });
+            animation.onfinish = () => { 
+                element.remove();
+            }
+
+        })
+
+
+
+    </script>
+</body>
+
+</html>
