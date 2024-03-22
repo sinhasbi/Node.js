@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .img {
+            width: 300px;
+            height: 300px;
+
+            & img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 不能用img, 改成img.src = image.src; 就可以-->
+    <!-- 不然就用div , 但要使用 img.append(image)-->
+    
+    <img class="img" src="" alt=""></img>
+    <br>
+    <input type="file" name="myFile" accept="image/*">
+
+    <script>
+        // id可以不用特別綁定?
+        document.querySelector("[name=myFile]").addEventListener("change", e => {
+            let file = e.target.files[0]
+            //   console.log(file);
+            let reader = new FileReader();
+            reader.addEventListener("load", e => {
+                let image = new Image()
+                image.src = e.target.result;
+                let img = document.querySelector(".img");
+                img.innerHTML=""
+                // img.append(image)
+                img.src = image.src;
+            });
+            reader.readAsDataURL(file)
+        })
+    </script>
+</body>
+
+</html>

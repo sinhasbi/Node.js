@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>自訂表單驗證訊息</title>
+</head>
+
+<body>
+    <form action="" autocomplete="on" onsubmit="return false">
+        <label for="myName">姓名: </label>
+        <input type="text" name="name" id="myName" autocomplete="given-name" autofocus placeholder="請輸入名字..." required
+            pattern=".{5}">
+        <br>
+        <label for="myEmail">信箱: </label>
+        <input type="email" name="myEmail" id="myEmail" autocomplete="email" required>
+        <br>
+
+        <label for="myPass">密碼: </label>
+        <input type="password" name="password" id="myPass" required pattern=".{6}">
+        <br>
+        <label for="myPass2">密碼驗證: </label>
+        <input type="password" name="password" id="myPass2" placeholder="請再輸入一次密碼..." required>
+        <br>
+        <label for="myTel">電話: </label>
+        <input type="tel" name="myTel" id="myTel" required pattern="^09\d{2}-?\d{3}-?\d{3}">
+
+        <br><br>
+        <input type="submit" value="送出">
+    </form>
+
+    <script>
+        const inputs = document.querySelectorAll("input")
+
+        // 看各項是否有符合格式，是否有填寫東西
+
+        const myValidate = e => {
+            console.log(e.target);
+            console.log(e.target.validity);
+            console.log("------");
+            let v=e.target.validity
+            // true===v.valueMissing  //請填寫這個欄位
+            // true===v.patternMismatch // 請符合要求的格式
+            // true===v.typeMisMatch //格式不正確
+
+            let msg = "";
+            switch (true) {
+                case v.valueMissing:
+                    msg = "請填寫這個欄位喔~"
+                    break;
+                case v.patternMismatch:
+                    msg = "請符合要求的格式啦"
+                    break;
+                case v.typeMisMatch:
+                    msg = "類別不正確啦"
+                    break;
+            }
+            e.target.setCustomValidity(msg)
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener("blur", myValidate)
+        })
+
+
+
+        const form1 = document.querySelector("form")
+
+        form1.addEventListener("submit", e => {
+            e.preventDefault();
+        })
+
+        myPass2.addEventListener("blur", e => {
+            if (myPass2.value !== myPass.value) {
+                // console.log("密碼不一致");
+                myPass2.setCustomValidity("密碼確認欄位與確認欄位需要一致")
+            } else {
+                myPass2.setCustomValidity("")
+            }
+        })
+    </script>
+</body>
+
+</html>

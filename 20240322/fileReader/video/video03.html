@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIDEO03</title>
+</head>
+
+<body>
+    <video id="player" width="100%"></video>
+    <button type="button">開始</button>
+
+    <script>
+        const player = document.querySelector("#player")
+        const btnStart = document.querySelector("button")
+        const playList = [
+            "video4.mp4",
+            "video3.mp4",
+            "video2.mp4",
+            "video1.mp4"
+        ]
+
+        const postURL = "pexels-pablo-penades-10187904.jpg";
+        let playNum = 0
+        player.setAttribute("poster", postURL);
+
+        player.addEventListener("ended", e => {
+            playNum++;
+
+            if(playNum>=playList.length){
+                playNum=0;
+                // return false
+            }
+            player.src = playList[playNum];
+            player.play()
+        })
+        
+        btnStart.addEventListener("click", e => {
+            e.currentTarget.disabled = true
+            player.src = playList[playNum];
+            player.play()
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .sub {
+            font-size: 36px;
+            font-weight: bold;
+            color: rgb(182, 188, 194);
+
+            .active {
+                color: rgb(177, 4, 4);
+            }
+        }
+    </style>
+    <title>VIDEO2</title>
+</head>
+
+<body>
+    <video id="player" width="100%"></video>
+    <div class="btns">
+        <button type="button" id="video1">影片1</button>
+        <button type="button" id="video2">影片2</button>
+        <button type="button" id="video3">影片3</button>
+        <button type="button" id="video4">影片4</button>
+        <button type="button" id="control">控制</button>
+    </div>
+
+    <div class="sub">
+        <span class="word">你</span><span class="word">好</span><span class="word">福</span><span
+            class="word">利</span><span class="word">蓮</span>
+
+    </div>
+
+    <script>
+        const btnsDiv = document.querySelector(".btns");
+        const btns = {
+            v1: document.querySelector("#video1"),
+            v2: document.querySelector("#video2"),
+            v3: document.querySelector("#video3"),
+            v4: document.querySelector("#video4"),
+            ctrl: document.querySelector("#control")
+        };
+        const player = document.querySelector("#player");
+        const postURL = "pexels-pablo-penades-10187904.jpg";
+        // 
+        player.setAttribute("poster", postURL);
+
+        const playerListener = e => {
+            console.log(`
+                ${e.type}
+                duration: ${player.duration}, 
+                currentTime : ${player.currentTime}, 
+                volume: ${player.volume}, 
+                muted: ${player.muted}, 
+                paused: ${player.paused}
+            `);
+
+            if (player.currentTime > 2.1 && player.currentTime < 2.4) {
+                const words = document.querySelectorAll(".sub .word")
+                words[0].classList.add("active")
+            }
+            if (player.currentTime >= 2.4 && player.currentTime < 2.7) {
+                const words = document.querySelectorAll(".sub .word")
+                words[1].classList.add("active")
+            }
+            if (player.currentTime >= 2.7 && player.currentTime < 3.0) {
+                const words = document.querySelectorAll(".sub .word")
+                words[2].classList.add("active")
+            }
+            if (player.currentTime >= 3.0 && player.currentTime < 3.3) {
+                const words = document.querySelectorAll(".sub .word")
+                words[3].classList.add("active")
+            }
+            if (player.currentTime >= 3.3 && player.currentTime < 3.6) {
+                const words = document.querySelectorAll(".sub .word")
+                words[4].classList.add("active")
+            }
+        }
+
+        player.addEventListener("ended", playerListener)
+        player.addEventListener("timeupdate", playerListener)
+        player.addEventListener("loadedmetadata", playerListener)
+        // 
+        btnsDiv.addEventListener("click", e => {
+            // console.log(e.target);
+
+            switch (e.target) {
+                case btns.v1:
+                    player.src = "video1.mp4"
+                    player.play();
+                    break;
+                case btns.v2:
+                    player.src = "video2.mp4"
+                    player.play();
+                    break;
+                case btns.v3:
+                    player.src = "video3.mp4"
+                    player.play();
+                    break;
+                case btns.v4:
+                    player.src = "video4.mp4"
+                    player.play();
+                    break;
+                case btns.ctrl:
+                    player.paused ? player.play() : player.pause();
+                    break;
+            }
+        })
+    </script>
+</body>
+
+</html>

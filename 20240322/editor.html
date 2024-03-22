@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        mark {
+            color: #fff;
+            background-color: rgb(255, 30, 0);
+        }
+    </style>
+    <title>EDITOR</title>
+</head>
+
+<body>
+    <div class="editor" contenteditable="">
+        落實漫畫國語庫存如此造成即將三年風格天使告訴你問道，玩家孤獨怎麼會規律那位劇情動畫操作系統隨後預期請問，好友平衡軟體經過一年傳說轉讓生活頻率激烈以外輕鬆，五年崇拜思維可見意大利內容說道搜尋中心寫作點點，想起小組庫存一個下載在此韓國只是你怎麼宣佈手中專欄依。
+    </div>
+    <script>
+        const editor = document.querySelector(".editor");
+
+        editor.addEventListener("mouseup", e => {
+            const selection = window.getSelection();
+            const selectedText = selection.toString().trim();
+
+            // console.log(selection);
+
+            if (selectedText.length <= 0) {
+                return false;
+            }
+            // 看selection物件有甚麼
+            const range = selection.getRangeAt(0)
+            const mark = document.createElement("mark")
+            mark.textContent =selectedText;
+
+            range.deleteContents()
+            range.insertNode(mark)
+
+            // 有mark過得不能再選取
+            // 或可以再選取一次取消掉mark
+        })
+
+    </script>
+</body>
+
+</html>

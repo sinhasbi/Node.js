@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sound</title>
+</head>
+
+<body>
+    <input type="file" name="myFile" accept="video/*">
+    <br>
+    <video id="audioPlayer" controls></video>
+
+    <script>
+        document.querySelector("[name=myFile]").addEventListener("change", e => {
+            let file = e.target.files[0];
+
+            let reader = new FileReader();
+            reader.addEventListener("load", e => {
+                audioPlayer.src = e.target.result;
+                audioPlayer.play();
+            })
+            reader.readAsDataURL(file)
+
+        })
+    </script>
+</body>
+
+</html>

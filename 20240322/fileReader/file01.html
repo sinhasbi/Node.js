@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .myFiles {
+            display: none;
+        }
+
+        .container {
+            box-sizing: border-box;
+            background-color: #00bbff;
+            min-height: 50px;
+            padding-top: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    </style>
+    <title>FILE</title>
+
+</head>
+
+<body>
+    <input class="myFiles" type="file" name="myFiles" id="myFiles" multiple>
+    <div class="container" id="container"></div>
+
+    <script>
+        const myFiles = document.querySelector("[name=myFiles]")
+        const container = document.querySelector(".container")
+
+        container.addEventListener("click", () => {
+            myFiles.click();
+        })
+
+        myFiles.addEventListener("change", e => {
+            // console.log(e);
+            // console.log(e.target.files[0].name);
+
+            // 即使只有一個，也是files
+            let fileList = e.target.files;
+            // console.log(fileList);
+            // 無法使用forEach，轉換成陣列
+            // Array.from(fileList).forEach(file => {
+            //     console.log(file.name);
+                
+            // });
+            [...fileList].forEach(file => {
+                // console.log(file);
+                container.innerHTML+=`${file.name} <br>`
+                
+            });
+        })
+    </script>
+</body>
+
+</html>
