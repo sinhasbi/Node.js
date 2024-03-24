@@ -40,17 +40,18 @@
 
             // 即使只有一個，也是files
             let fileList = e.target.files;
-            // console.log(fileList);
+            console.log(fileList);
             // 無法使用forEach，轉換成陣列
-            // Array.from(fileList).forEach(file => {
-            //     console.log(file.name);
-                
-            // });
-            [...fileList].forEach(file => {
-                // console.log(file);
+            Array.from(fileList).forEach(file => {
+                console.log(file.name);
                 container.innerHTML+=`${file.name} <br>`
                 
             });
+            // [...fileList].forEach(file => {
+            //     // console.log(file);
+            //     container.innerHTML+=`${file.name} <br>`
+                
+            // });
         })
     </script>
 </body>

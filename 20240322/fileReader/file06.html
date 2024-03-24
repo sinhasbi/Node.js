@@ -75,6 +75,7 @@
             fileInput.addEventListener("change", e => {
                 let file = e.target.files[0];
                 let myLabel = e.target.previousElementSibling;
+                console.log(myLabel);
                 let myImg = myLabel.querySelector(".img");
 
                 let reader = new FileReader();

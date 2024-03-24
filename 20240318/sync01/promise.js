@@ -1,4 +1,4 @@
-let a;
+ let a;
 console.log("開始");
 
 setTimeout(() => {

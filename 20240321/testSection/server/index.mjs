@@ -34,6 +34,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // secret金鑰
+// SESSION怎麼建立起來的
 app.use(session({
     secret: "benbenben",
     resave: false,
@@ -49,6 +50,7 @@ app.get("/", (req, res) => {
 
 // 測試session
 app.post("/", upload.none(), (req, res) => {
+    // cookie是幹嘛用的
     console.log(req.get("cookie"));
     const { account, password } = req.body;
     console.log({account,password});
