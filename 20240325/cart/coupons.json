@@ -1,0 +1,14 @@
+{
+    "coupons": [
+      {
+        "id": 1,
+        "Discount": 0.2,
+        "title": "全館八折"
+      },
+      {
+        "id": 2,
+        "Discount": -100,
+        "title": "滿千折百"
+      }
+    ]
+  }

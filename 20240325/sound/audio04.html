@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUDIO$</title>
+</head>
+
+<body>
+    <script>
+
+        let soundObj = {
+            shoot: "./shoot.mp3",
+            explo: "./explo.mp3"
+
+        }
+        window.addEventListener("keyup", e => {
+            if (e.key === " ") {
+                playSound("shoot")
+            }else if(e.key === "Enter"){
+                playSound("explo")
+            }
+        })
+
+        function playSound(key) {
+            let shoot = new Audio(soundObj[key])
+            shoot.addEventListener("ended", e => {
+                // 清除記憶體，不然會過載
+                e.currentTarget = null
+            })
+            shoot.play()
+        }
+    </script>
+</body>
+
+</html>

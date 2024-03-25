@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .game {
+      position: relative;
+      width: 480px;
+      height: 360px;
+
+      .bgi {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url(./images/universe1.png);
+        animation-name: bgiAni;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: step-start;
+      }
+
+      .plane {
+        position: absolute;
+        width: 72px;
+        height: 60px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        bottom: 10px;
+        background-image: url(./images/plane1.png);
+      }
+
+      .planeE {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 10px;
+        width: 88px;
+        height: 64px;
+        animation-name: enemyAni;
+        animation-duration: 5s;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+      }
+
+      .bullet {
+        position: absolute;
+        width: 24px;
+        height: 25px;
+        left: 0;
+        right: 0;
+        margin: auto;
+        bottom: 10px;
+        animation-name: bulletAni;
+        animation-duration: 1s;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+      }
+
+      .explosion {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        top: 10px;
+        width: 128px;
+        height: 128px;
+        background-image: url(./images//explosion/explo-0.png);
+        animation: explosion 1s step-start 1 forwards;
+      }
+    }
+
+    @keyframes bulletAni {
+      0% {
+        bottom: 10px;
+      }
+
+      100% {
+        bottom: 340px;
+      }
+    }
+
+    @keyframes enemyAni {
+      0% {
+        top: 10px;
+      }
+
+      100% {
+        top: 360px;
+      }
+    }
+
+    @keyframes bgiAni {
+      0% {
+        background-image: url(./images/universe1.png);
+      }
+
+      50% {
+        background-image: url(./images/universe2.png);
+      }
+
+      100% {
+        background-image: url(./images/universe1.png);
+      }
+    }
+
+    @keyframes explosion {
+      0% {
+        background-position: -1px -1px;
+      }
+
+      6.25% {
+        background-position: -131px -1px;
+      }
+
+      12.5% {
+        background-position: -261px -1px;
+      }
+
+      18.75% {
+        background-position: -391px -1px;
+      }
+
+      25% {
+        background-position: -521px -1px;
+      }
+
+      31.25% {
+        background-position: -651px -1px;
+      }
+
+      37.5% {
+        background-position: -781px -1px;
+      }
+
+      43.75% {
+        background-position: -911px -1px;
+      }
+
+      50% {
+        background-position: -1041px -1px;
+      }
+
+      56.25% {
+        background-position: -1171px -1px;
+      }
+
+      62.5% {
+        background-position: -1301px -1px;
+      }
+
+      68.75% {
+        background-position: -1431px -1px;
+      }
+
+      75% {
+        background-position: -1561px -1px;
+      }
+
+      81.25% {
+        background-position: -1691px -1px;
+      }
+
+      87.5% {
+        background-position: -1821px -1px;
+      }
+
+      93.75% {
+        background-position: -1821px -1px;
+      }
+
+      100% {
+        background-position: -1821px -1px;
+      }
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+  <title>Game1</title>
+</head>
+
+<body>
+  <div class="game">
+    <div class="bgi"></div>
+    <div class="plane"></div>
+  </div>
+  <script>
+    let x = 0;
+    let bn = 0;
+    let en = 0;
+    let explon = 0;
+    let score = 0;
+    let canShoot = true;
+    let keysPressed = {};
+    let planeEtimer;
+
+    let soundObj = {
+      shoot: "../shoot.mp3",
+      explo: "../explo.mp3"
+
+    }
+
+    $(window).on("keydown", function (e) {
+      keysPressed[e.which] = true;
+    }).on("keyup", function (e) {
+      delete keysPressed[e.which];
+    });
+
+    gameLoop();
+    setEnemy();
+    planeEtimer = setInterval(setEnemy, 1000)
+
+    function playSound(key) {
+      let shoot = new Audio(soundObj[key])
+      shoot.addEventListener("ended", e => {
+        e.currentTarget = null
+      })
+      shoot.play()
+    }
+
+
+    function gameLoop() {
+      if (keysPressed[39]) {
+        x += 10;
+        if (x >= 410) {
+          x = 410;
+        }
+        $(".plane").css("left", `${x}px`);
+      }
+      if (keysPressed[37]) {
+        x -= 10;
+        if (x <= -410) {
+          x = -410;
+        }
+        $(".plane").css("left", `${x}px`);
+      }
+      if (keysPressed[32]) {
+        if (canShoot === true) {
+          canShoot = false;
+          bn++;
+          playSound("shoot")
+          let bt = `
+            <div class="bullet bullet${bn}">
+              <img src="./images/bullet1.png" alt="">
+            </div>`;
+          $(".game").append(bt);
+          $(".game .bullet" + bn).css("left", x + "px");
+          $(".game .bullet" + bn).animate({
+            bottom: "340px"
+          },{
+            duration: 1000,
+            easing: "linear",
+            step: function() {
+              var $bullet = $(this);
+              $(".planeE").each(function() {
+                var $enemy = $(this);
+                if (isOverLap($bullet, $enemy)) {
+                  let exx = $(this).css("left");
+                  let exy = $(this).css("top");
+                  console.log(exx, exy);
+                  $bullet.remove();
+                  $enemy.remove();
+                  explon++;
+                  playSound("explo")
+                  $(".game").append(`<div class="explosion explosion${explon}"></div>`);
+                  $(".explosion"+explon).css("left", exx);
+                  $(".explosion"+explon).css("top", exy);
+                  $(".explosion"+explon).on("animationend", function(){
+                    $(this).remove();
+                  })
+                  score++;
+                }
+              });
+            },
+            complete:function () {
+              $(this).remove();
+            }
+          })
+          setTimeout(() => {
+            canShoot = true;
+          }, 120)
+        }
+      }
+      $(".bullet").each((index, elm) => {
+        let $bullet = $(elm);
+        $(".planeE").each(function (index, elm) {
+          let $enemy = $(elm);
+          if (isOverLap($bullet, $enemy)) {
+            let exx = $(this).css("left");
+            let exy = $(this).css("top");
+            $bullet.remove();
+            $enemy.remove();
+            explon++;
+            $(".game").append(`<div class="explosion explosion${explon}"></div>`);
+            $(".explosion" + explon).css("left", exx);
+            $(".explosion" + explon).css("top", exy);
+            $(".explosion" + explon).on("animationend", function () {
+              $(this).remove();
+            })
+            score++;
+          }
+        });
+      });
+      requestAnimationFrame(gameLoop);
+    }
+
+    $(".game").on("animationend", (e) => {
+      if ($(e.target).hasClass("planeE") || $(e.target).hasClass("bullet")) {
+        $(e.target).remove();
+      }
+    });
+
+    function setEnemy() {
+      let posi = (Math.floor(Math.random() * 4) - 2) * 180;
+      en++;
+      let enemy = `
+        <div id="enemy${en}" class="planeE enemy${en}">
+          <img src="./images/plane2.png" alt="">
+        </div>`;
+      $(".game").append(enemy);
+      $(".game .enemy" + en).css("left", posi + "px");
+      // $(".game .enemy" + en).on("animationend",(e)=>{
+      //   let that = e.currentTarget;
+      //   $(that).remove();
+      // });
+      // $(".game .enemy" + en).animate({
+      //   top: "380px"
+      // }, {
+      //   duration: 4000,
+      //   easing: "linear",
+      //   complete: function () {
+      //     $(this).remove();
+      //   }
+      // })
+    }
+
+    function isOverLap($div1, $div2) {
+      let x1 = $div1.offset().left;
+      let y1 = $div1.offset().top;
+      let w1 = $div1.outerWidth();
+      let h1 = $div1.outerHeight();
+
+      let x2 = $div2.offset().left;
+      let y2 = $div2.offset().top;
+      let w2 = $div2.outerWidth();
+      let h2 = $div2.outerHeight();
+
+      if (x1 < x2 + w2 &&
+        x1 + w1 > x2 &&
+        y1 < y2 + h2 &&
+        y1 + h1 > y2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  </script>
+</body>
+
+</html>

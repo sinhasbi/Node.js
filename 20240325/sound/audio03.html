@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUDIO03</title>
+</head>
+
+<body>
+    <audio id="player" controls></audio>
+    <button type="button">開始</button>
+
+    <script>
+        const player = document.querySelector("#player")
+        const btnStart = document.querySelector("button")
+        const playList = [
+            "./list1.mp3",
+            "./list2.mp3",
+            "./list3.mp3"
+        ]
+
+        let playNum = 0;
+
+        player.addEventListener("ended", e => {
+            playNum++;
+            if (playNum >= playList.length) {
+                btnStart.disabled = false;
+                playNum=0;
+                return false
+            }
+            player.src = playList[playNum];
+            player.play();
+        })
+
+        btnStart.addEventListener("click", e => {
+            e.currentTarget.disabled = true
+            player.src = playList[playNum];
+            player.play();
+        })
+
+    </script>
+</body>
+
+</html>

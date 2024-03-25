@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        .pd {
+            display: flex;
+
+            .img {
+                width: 250px;
+                height: 250px;
+
+                & img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .price {
+                font-size: 20px;
+                color: #f10cb0;
+            }
+
+            & input {
+                width: 100px;
+            }
+        }
+
+        .cart {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            font-size: 24px;
+            background-color: #e83131;
+            color: #fff;
+            padding: 10px;
+        }
+    </style>
+    <title>產品頁 - 加入購物車</title>
+</head>
+
+<body>
+    <h1>產品頁 - 加入購物車</h1>
+    <div class="pd">
+        <div class="img">
+            <img src="https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                alt="">
+        </div>
+        <div class="content">
+            <h2>產品名稱</h2>
+            <div class="price">999</div>
+            <input type="number" value="0" name="amount">
+            <button class="btn-Add" type="button">加入</button>
+            <a href="./testCart1.html">
+                <button type="button">回上一頁</button>
+            </a>
+        </div>
+    </div>
+    <a href="./testCart3.html">
+        <div class="cart">3</div>
+    </a>
+
+    <script>
+        let datas;
+        // 從網址抓取id
+        const querySting = window.location.search;
+        const urlParams = new URLSearchParams(querySting);
+        const id = parseInt(urlParams.get("id"), 10);
+        //   console.log(id);
+
+
+        const divCart = document.querySelector(".cart");
+        const img = document.querySelector(".img img")
+        const h2 = document.querySelector("h2")
+        const divPrice = document.querySelector(".price")
+        const btnAdd = document.querySelector(".btn-Add")
+
+        let cartAry = JSON.parse(localStorage.getItem("html5API-cart"));
+        if (!cartAry) {
+            cartAry = [];
+        }
+        divCart.innerHTML = cartAry.length;
+
+        btnAdd.addEventListener("click", e => {
+            let amount = parseInt(document.querySelector("input[name=amount]").value)
+            if (amount <= 0) {
+                return false
+            }
+            let item = cartAry.find(pd => pd.id === id)
+            if (item) {
+                item.amount += amount;
+            } else {
+                item = { id, amount };
+                cartAry.push(item);
+            }
+            localStorage.setItem("html5API-cart", JSON.stringify(cartAry))
+            divCart.innerHTML = cartAry.length;
+            document.querySelector("input[name=amount]").value=0
+        })
+        let getData = () => {
+            return new Promise((resolve, reject) => {
+                let url = "./products.json"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(result => {
+                        return resolve(result.products)
+                    }).catch(error => {
+                        console.log(error);
+                        return reject(undefined)
+                    })
+            })
+        }
+
+        (async () => {
+            datas = await getData()
+            // console.log(datas);
+            let data = datas.find(pd => pd.id === id)
+            console.log(data);
+            img.setAttribute("src", data.img)
+            divPrice.innerHTML = data.price
+            h2.innerHTML = data.name
+        })()
+    </script>
+</body>
+
+</html>

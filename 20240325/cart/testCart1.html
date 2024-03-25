@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .pds {
+            & a {
+                text-decoration: none;
+            }
+        }
+
+        .pd {
+            display: flex;
+            margin-bottom: 10px;
+
+            .img {
+                width: 100px;
+                height: 100px;
+
+                & img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .name {
+                font-size: 24px;
+            }
+        }
+
+        .cart {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            font-size: 24px;
+            background-color: red;
+            color: #fff;
+            padding: 10px;
+        }
+    </style>
+    <title>產品列表頁</title>
+</head>
+
+<body>
+    <h1>產品列表</h1>
+    <div class="pds">
+        <!-- <a href="./testCart2.html">
+            <div class="pd">
+                <div class="img">
+                    <img src="https://images.pexels.com/photos/357756/pexels-photo-357756.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        alt="">
+                </div>
+                <div class="name">產品名稱</div>
+            </div>
+        </a> -->
+
+    </div>
+
+    <a href="./testCart3.html">
+        <div class="cart">3</div>
+    </a>
+
+    <script>
+        const pds = document.querySelector(".pds")
+        const divCart = document.querySelector(".cart")
+        let datas;
+
+        let cartAry = JSON.parse(localStorage.getItem("html5API-cart"))
+        if (!cartAry) {
+            cartAry = []
+        }
+        divCart.innerHTML = cartAry.length;
+
+        let getData = () => {
+            return new Promise((resolve, reject) => {
+                let url = "./products.json"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(result => {
+                        return resolve(result.products)
+                    }).catch(error => {
+                        console.log(error);
+                        return reject(undefined)
+                    })
+            })
+        }
+        (async () => {
+            datas = await getData()
+            console.log(datas);
+            datas.forEach(data => {
+                let node = document.createElement("div");
+                node.innerHTML = `<a href="./testCart2.html?id=${data.id}">
+                <div class="pd">
+                <div class="img">
+                    <img src="${data.img}"
+                        alt="${data.name}">
+                </div>
+                <div class="name">${data.name}</div>
+                </div>
+                </a>`
+                pds.append(node.children[0])
+            })
+        })()
+
+    </script>
+
+</body>
+
+</html>

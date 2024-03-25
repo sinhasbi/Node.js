@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .pd {
+            display: flex;
+
+            .img {
+                width: 50px;
+                height: 50px;
+
+                & img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .name,
+            .price {
+                margin-right: 10px;
+            }
+
+            .input {
+                width: 100px;
+            }
+
+            .money {
+                margin-left: auto;
+            }
+        }
+
+        .total {
+            font-size: 24px;
+            text-align: right;
+        }
+
+        .old {
+            color: #6d6d6d;
+            text-decoration: line-through;
+            margin-right: 10px;
+        }
+
+        .new {
+            color: #f11e1e;
+            font-size: 36px;
+        }
+    </style>
+    <title>購物車結帳流程</title>
+</head>
+
+<body>
+    <h1>購物車-結帳 STEP1
+        <a href="./testCart1.html"><button type="button">BACK</button></a>
+    </h1>
+
+    <div class="pds">
+        <!-- <div class="pd">
+            <div class="img">
+                <img src="" alt="">
+            </div>
+            <div class="name">產品名</div>
+            <div class="price">999</div>
+
+            <div><input type="number" name="amount" value="0"></div>
+            <div><button type="button" class="btn-update">修改</button></div>
+            <div><button type="button" class="btn-del">刪除</button></div>
+
+
+        </div> -->
+
+    </div>
+
+    <div class="total">9999</div>
+    <div class="coupons">
+        <input type="radio" name="coupon" id="c0" checked>
+        <label for="c0">不使用優惠券</label>
+    </div>
+    <!-- cid用來跟資料庫的id作比對用的 -->
+    <!-- <div class="coupons" cid="1">
+        <input type="radio" name="coupon" id="c1">
+        <label for="c1">全館八折</label>
+    </div> -->
+
+    <script>
+        const divPds = document.querySelector(".pds")
+        const divCoupons = document.querySelector(".coupons")
+        const divTotal = document.querySelector(".total")
+
+        let totalMoney = 0
+        let couponDatas;
+        let cartAry = JSON.parse(localStorage.getItem("html5API-cart"));
+        if (!cartAry) {
+            cartAry = [];
+        }
+
+        divPds.addEventListener("click", e => {
+            // 侷限只有在修改按鈕的進行動作
+            if ((e.target.classList.contains("btn-update"))) {
+                // console.log(e.target.getAttribute("pid"));
+                const divPd = e.target.closest(".pd");
+                const id = parseInt(e.target.getAttribute("pid"))
+                let amount = parseInt(divPd.querySelector("input[name=amount]").value)
+                // console.log(amount);
+
+                // 數量<0就是刪除
+                if (amount <= 0) {
+                    divPd.querySelector(".btn-del").click()
+                    return false;
+                }
+                // 修改第一種方法 抓id
+                // let item = cartAry.find(pd => pd.id === id)
+                // item.amount=amount
+                // console.log(item);
+
+                // 寫入loaclStorage，重新繪製購物車區塊
+                // localStorage.setItem("html5API-cart", JSON.stringify(cartAry))
+                // 為甚麼是寫進cartAry明明沒有動到他啊
+                // initPage();
+
+
+                // 修改第二種 抓price
+                const price = parseInt(divPd.getAttribute("price"))
+                let item = cartAry.find(pd => pd.id === id)
+                const amountCart = item.amount
+                const money = amountCart * price;
+                totalMoney -= money;
+                totalMoney += price * amount;
+                // console.log(price);
+                // console.log(amountCart);
+                // console.log(money);
+                divTotal.innerHTML = totalMoney;
+                item.amount = amount;
+                localStorage.setItem("html5API-cart", JSON.stringify(cartAry))
+                const divMoney = divPd.querySelector(".money")
+                divMoney.innerHTML = price * amount
+                initCoupons();
+
+
+
+            } else if (e.target.classList.contains("btn-del")) {
+                // 數字轉字串
+                const id = parseInt(e.target.getAttribute("pid"))
+                // 只取不是這個id的東西 > 就是刪除掉
+                cartAry = cartAry.filter(pd => pd.id !== id)
+                localStorage.setItem("html5API-cart", JSON.stringify(cartAry))
+                initPage();
+            }
+
+        })
+
+        divCoupons.addEventListener("change", e => {
+            // console.log(e.target);
+            let divCoupon = e.target.closest(".coupon")
+            const cid = parseInt(divCoupon.getAttribute("cid"), 10)
+            // console.log(cid);
+            // couponDatas
+            let discount;
+            if (cid === 0) {
+                discount = 1;
+                divTotal.innerHTML = `${totalMoney}`;
+                return false;
+            }
+            const coupon = couponDatas.find(c => c.id === cid);
+            discount = coupon.Discount;
+            let newTotalMoney;
+            if (discount < 0) {
+                newTotalMoney = totalMoney + discount;
+            } else {
+                newTotalMoney = totalMoney * (1 - discount);
+            }
+            divTotal.innerHTML = `
+            <span class="old">${totalMoney}</span><span class="new">${newTotalMoney}</span>
+            `
+
+        })
+        let getData = () => {
+            return new Promise((resolve, reject) => {
+                let url = "./products.json"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(result => {
+                        return resolve(result.products)
+                    }).catch(error => {
+                        console.log(error);
+                        return reject(undefined)
+                    })
+            })
+        }
+
+
+        let getCouponsData = () => {
+            return new Promise((resolve, reject) => {
+                let url = "./coupons.json"
+                fetch(url)
+                    .then(response => response.json())
+                    .then(result => {
+                        return resolve(result.coupons)
+                    }).catch(error => {
+                        console.log(error);
+                        return reject(undefined)
+                    })
+            })
+        }
+
+        let initPage = async () => {
+            let datas = await getData()
+            totalMoney = 0;
+            // console.log(datas);
+            divPds.innerHTML = ""
+            cartAry.forEach(item => {
+                let node = document.createElement("div")
+                const itemData = datas.find(pd => pd.id === item.id)
+                node.innerHTML = `<div class="pd" pid="${item.id}" price="${itemData.price}">
+            <div class="img">
+                <img src="${itemData.img}" alt="">
+            </div>
+            <div class="name">${itemData.name}</div>
+            <div class="price">${itemData.price}</div>
+
+            <div><input type="number" name="amount" value="${item.amount}"></div>
+            <div><button type="button" pid="${item.id}" class="btn-update">修改</button></div>
+            <div><button type="button" pid="${item.id}" class="btn-del">刪除</button></div>
+            <div class="money">${itemData.price * item.amount}</div>
+        </div> `
+                totalMoney += itemData.price * item.amount
+
+                divPds.append(node.children[0])
+
+            });
+            divTotal.innerHTML = totalMoney;
+        }
+
+        let initCoupons = async () => {
+            couponDatas = await getCouponsData()
+            // console.log(datas);
+            divCoupons.innerHTML = `<div class="coupon" cid="0">
+               <input type="radio" name="coupon" id="c0" checked>
+               <label for="c0">不使用優惠券</label>
+               </div>`
+            couponDatas.forEach((c, index) => {
+                let node = document.createElement("div")
+                let disabled = ""
+                if (index === 1) {
+                    if (totalMoney < 1000) {
+                        disabled = "disabled";
+                    }
+                }
+                node.innerHTML = `<div class="coupon" cid="${c.id}">
+                   <input type="radio" name="coupon" id="c${index + 1}" ${disabled}>
+                   <label for="c${index + 1}">${c.title}</label>
+                   </div>`
+                divCoupons.append(node.children[0])
+            })
+
+        }
+
+        initPage();
+        initCoupons();
+
+
+
+    </script>
+</body>
+
+</html>
